@@ -1,0 +1,20 @@
+[package]
+name    = "alacritty-theme"
+version = "0.1.0"
+authors = ["David Lewis <david@armstronglewis.com>"]
+edition = "2018"
+license = "MIT"
+
+description = "Making it slightly easier to change Alacritty's color scheme"
+repository  = "https://github.com/davidarmstronglewis/alacritty-theme"
+readme      = "README.md"
+keywords    = ["alacritty", "theme"]
+
+[dependencies]
+structopt = { version = "0.3.5", features = ["color"] }
+serde = { version = "1.0.103", features = ["derive"] }
+serde_yaml = "0.8.11"
+derive_more = "0.99.2"
+dirs = "2.0.2"
+regex = "1.3.1"
+termion = "1.5.3"
