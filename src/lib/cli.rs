@@ -1,5 +1,6 @@
 use crate::lib::{AlacrittyConfig, Error};
 
+use std::path::PathBuf;
 use structopt::{clap::AppSettings, StructOpt};
 
 #[derive(StructOpt, Debug)]
@@ -14,34 +15,55 @@ pub enum Cli {
     about = "Print a list of your available Alacritty themes",
     setting(AppSettings::ColoredHelp)
   )]
-  ListThemes,
+  PrintAllThemes {
+    /// Specifies the path of the Alacritty config
+    #[structopt(short = "c", long)]
+    config_file: Option<PathBuf>,
+  },
 
   #[structopt(
     name = "current",
     about = "Print the current Alacritty theme",
     setting(AppSettings::ColoredHelp)
   )]
-  PrintCurrentTheme,
+  PrintCurrentTheme {
+    /// Specifies the path of the Alacritty config
+    #[structopt(short = "c", long)]
+    config_file: Option<PathBuf>,
+  },
 
   #[structopt(
     name = "change",
     about = "Change the current Alacritty theme to the given theme",
     setting(AppSettings::ColoredHelp)
   )]
-  ChangeTheme { theme: String },
+  ChangeTheme {
+    theme: String,
+    /// Specifies the path of the Alacritty config
+    #[structopt(short = "c", long)]
+    config_file: Option<PathBuf>,
+  },
 }
 impl Cli {
   pub fn run() -> Result<(), Error> {
-    let mut config = AlacrittyConfig::load()?;
-
     match Cli::from_args() {
-      Cli::ListThemes => config.print_themes(),
-      Cli::ChangeTheme { theme } => {
-        config.change_theme(&theme)?;
-        config.save()?;
+      Cli::PrintAllThemes { config_file } => {
+        let alacritty_config = AlacrittyConfig::load(config_file)?;
+        alacritty_config.print_all_themes();
       }
-      Cli::PrintCurrentTheme => config.print_current_theme(),
+
+      Cli::ChangeTheme { theme, config_file } => {
+        let mut alacritty_config = AlacrittyConfig::load(config_file)?;
+        alacritty_config.change_theme(&theme)?;
+        alacritty_config.save()?;
+      }
+
+      Cli::PrintCurrentTheme { config_file } => {
+        let alacritty_config = AlacrittyConfig::load(config_file)?;
+        alacritty_config.print_current_theme();
+      }
     };
+
     Ok(())
   }
 }

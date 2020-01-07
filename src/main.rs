@@ -1,6 +1,6 @@
 use termion::color;
 
-mod lib;
+pub mod lib;
 use lib::Cli;
 
 fn main() {
@@ -20,13 +20,13 @@ mod tests {
 
   #[test]
   fn loads_alacritty_config() {
-    assert!(AlacrittyConfig::load().is_ok());
+    assert!(AlacrittyConfig::load(None).is_ok());
   }
 
   #[test]
   fn changes_color_scheme() -> Result<(), Error> {
     let mut config =
-      AlacrittyConfig::load_at_path("./test/alacritty.yml".into())?;
+      AlacrittyConfig::load(Some("./test/alacritty.yml".into()))?;
 
     fn check_successful_change(
       given_theme: &str,

@@ -6,6 +6,7 @@ pub enum Error {
   IO(io::Error),
   SerdeYaml(serde_yaml::Error),
   HomeDirectoryMissing,
+  ConfigurationNotFound,
   ColorSchemesMissing,
   ColorSchemesNotAMapping,
   ColorSchemeNotAvailable,
@@ -16,6 +17,7 @@ impl fmt::Display for Error {
       Error::IO(_) => write!(f, "An IO Operation failed"),
       Error::SerdeYaml(_) => write!(f, "Serde Yaml failed to parse the Alacritty config"),
       Error::HomeDirectoryMissing => write!(f, "Could not find the user's home directory"),
+      Error::ConfigurationNotFound => write!(f, "Could not find a valid Alacritty config"),
       Error::ColorSchemesMissing => write!(
         f,
         "Could not find any available color schemes, these should be under the \"color_schemes\" key"
